@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ivan Kondzerau](https://up.htmlacademy.ru/javascript/19/user/1033347).
-* Наставник: `Неизвестно`.
+* Наставник: [Иван Захарченко](https://htmlacademy.ru/profile/id1033227).
 
 ---
 
