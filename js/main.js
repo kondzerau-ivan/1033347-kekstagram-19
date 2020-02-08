@@ -1,6 +1,6 @@
 'use strict';
 
-var NAMES_ARR = [
+var NAMES = [
   'Валера',
   'Толик',
   'Галя',
@@ -8,7 +8,7 @@ var NAMES_ARR = [
   'Иннокентий'
 ];
 
-var MESSAGE_ARR = [
+var MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -17,48 +17,49 @@ var MESSAGE_ARR = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-var COMMENTS_ARR = [];
-
-var randomRange = function (min, max) {
-  return Math.floor(Math.random() * max) + min;
-};
-
-var genMessage = function () {
-  var MESSAGE = '';
-  for (var o = 1; o <= randomRange(1, 2); o++) {
-    MESSAGE += MESSAGE_ARR[randomRange(0, 5)] + ',';
-  }
-  return MESSAGE;
-};
-// Fill COMMENTS_ARR
-for (var u = 0; u < 25; u++) {
-  COMMENTS_ARR.push({
-    avatar: 'img/avatar-' + randomRange(1, 6) + '.svg',
-    message: genMessage(),
-    name: NAMES_ARR[randomRange(0, 4)]
-  });
+function random(min, max) {
+  return Math.floor(min + Math.random() * (max + 1 - min));
 }
 
-var generatePicDescription = function () {
-  var arrPicDesc = [];
-  for (var i = 1; i <= 25; i++) {
-    arrPicDesc.push({
-      url: 'photos/' + i + '.jpg',
-      description: '',
-      likes: randomRange(15, 200),
-      comments: COMMENTS_ARR[randomRange(0, 24)]
-    });
+function shuffle(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    array[i] = array[j];
+    array[j] = array[i];
   }
-  return arrPicDesc;
-};
+  return array;
+}
+
+function message() {
+  return shuffle(MESSAGES).slice(random(1, 2)).join(' ');
+}
+
+function comment() {
+  return {
+    avatar: 'img/avatar-' + random(1, 6) + '.svg',
+    message: message,
+    name: NAMES[random(0, 6)]
+  };
+}
+
+var POSTS = [];
+
+for (var u = 1; u <= 25; u++) {
+  POSTS.push = {
+    url: 'photos/' + u + '.jpg',
+    description: '',
+    likes: random(15, 200),
+    comments: comment
+  };
+}
 
 var picTemplate = document.querySelector('#picture');
 var picElement = document.querySelector('.picture');
 
-for (var j = 0; j < 25; j++) {
+for (var y = 0; y < POSTS.length; y++) {
   var currentPicElement = picTemplate.cloneNode(true);
-  currentPicElement.querySelector('.picture_img').src = generatePicDescription()[j]['url'];
-  currentPicElement.querySelector('.picture__likes').textContent = generatePicDescription()[j]['likes'];
-  currentPicElement.querySelector('.picture__comments').textContent = generatePicDescription()[j]['comments'];
+  currentPicElement.querySelector('.picture_img').src = POSTS[y]['url'];
+  currentPicElement.querySelector('.picture__likes').textContent = POSTS[y]['likes'];
+  currentPicElement.querySelector('.picture__comments').textContent = POSTS[y]['comments'];
   picElement.appendChild(currentPicElement);
 }
