@@ -56,18 +56,15 @@ function getPost() {
 }
 
 function fillPicture(target, template, NEW_POSTS) {
-  template = document.querySelector('#picture');
-  target = document.querySelector('.picture');
-  NEW_POSTS = getPost();
-
   for (var y = 0; y < NEW_POSTS.length; y++) {
-    var current = template.cloneNode(true);
+    var current = document.querySelector(template).cloneNode(true);
     current.querySelector('.picture_img').src = NEW_POSTS[y]['url'];
     current.querySelector('.picture__likes').textContent = NEW_POSTS[y]['likes'];
     current.querySelector('.picture__comments').textContent = NEW_POSTS[y]['comments'];
-    target.appendChild(current);
+    document.querySelector(target).appendChild(current);
   }
   return target;
 }
 
-fillPicture();
+var NEW_POSTS = getPost();
+fillPicture('.picture', '#picture', NEW_POSTS);
