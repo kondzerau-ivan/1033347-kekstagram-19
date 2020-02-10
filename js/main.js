@@ -22,12 +22,12 @@ function random(min, max) {
 }
 
 function shuffle(array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    array[i] = array[j];
-    array[j] = array[i];
+  var inputCopy = array.slice();
+  var result = [];
+  while (inputCopy.length !== 0) {
+    result = inputCopy.splice(random(0, inputCopy.length - 1), 1);
   }
-  return array;
+  return result;
 }
 
 function message() {
@@ -42,24 +42,32 @@ function comment() {
   };
 }
 
-var POSTS = [];
-
-for (var u = 1; u <= 25; u++) {
-  POSTS.push = {
-    url: 'photos/' + u + '.jpg',
-    description: '',
-    likes: random(15, 200),
-    comments: comment
-  };
+function getPost() {
+  var POSTS = [];
+  for (var u = 1; u <= 25; u++) {
+    POSTS.push = {
+      url: 'photos/' + u + '.jpg',
+      description: '',
+      likes: random(15, 200),
+      comments: comment
+    };
+  }
+  return POSTS;
 }
 
-var picTemplate = document.querySelector('#picture');
-var picElement = document.querySelector('.picture');
+function fillPicture(target, template, NEW_POSTS) {
+  template = document.querySelector('#picture');
+  target = document.querySelector('.picture');
+  NEW_POSTS = getPost();
 
-for (var y = 0; y < POSTS.length; y++) {
-  var currentPicElement = picTemplate.cloneNode(true);
-  currentPicElement.querySelector('.picture_img').src = POSTS[y]['url'];
-  currentPicElement.querySelector('.picture__likes').textContent = POSTS[y]['likes'];
-  currentPicElement.querySelector('.picture__comments').textContent = POSTS[y]['comments'];
-  picElement.appendChild(currentPicElement);
+  for (var y = 0; y < NEW_POSTS.length; y++) {
+    var current = template.cloneNode(true);
+    current.querySelector('.picture_img').src = NEW_POSTS[y]['url'];
+    current.querySelector('.picture__likes').textContent = NEW_POSTS[y]['likes'];
+    current.querySelector('.picture__comments').textContent = NEW_POSTS[y]['comments'];
+    target.appendChild(current);
+  }
+  return target;
 }
+
+fillPicture();
