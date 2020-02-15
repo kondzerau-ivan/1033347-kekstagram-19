@@ -35,11 +35,11 @@ function message() {
 }
 
 function comment() {
-  return {
+  return [].push({
     avatar: 'img/avatar-' + random(1, 6) + '.svg',
     message: message,
     name: NAMES[random(0, 6)]
-  };
+  }.random(1, 5));
 }
 
 function getPost() {
@@ -67,4 +67,59 @@ function fillPicture(target, template, NEW_POSTS) {
 }
 
 var NEW_POSTS = getPost();
+
 fillPicture('.picture', '#picture', NEW_POSTS);
+
+function showElement(element) {
+  document.querySelector(element)
+  .classList
+  .remove('hidden');
+}
+
+function hideElement(element) {
+  document.querySelector(element)
+  .classList
+  .add('hidden');
+}
+
+showElement('.big-picture');
+
+function generateText() {
+  for (var y = 0; y < NEW_POSTS[0]['comments'].length; y++) {
+    var text = document.createTextNode(NEW_POSTS[0]['comments'][y]['message']);
+  }
+  return text;
+}
+
+function fillComment(block) {
+  var blockElement = document.querySelector(block).cloneNode(true);
+  blockElement.querySelector('.social__picture')
+  .setAttribute('src', NEW_POSTS[0]['comments']['avatar'])
+  .setAttribute('alt', NEW_POSTS[0]['comments']['name'])
+  .setAttribute('width', 35)
+  .setAttribute('height', 35);
+  blockElement.querySelector('.socil__text')
+  .appendChild(generateText);
+  document.querySelector('.social__comments')
+  .textContent(blockElement);
+}
+
+function fillBigPicture() {
+  document.querySelector('.big-picture__img img')
+  .setAttribute('src', NEW_POSTS[0]['url']);
+  document.querySelector('.likes-count')
+  .textContent = NEW_POSTS[0]['likes'];
+  document.querySelector('.comments-count')
+  .textContent = NEW_POSTS[0]['comments'].length;
+  fillComment('.social__comment');
+  document.querySelector('.social__caption')
+  .textContent(NEW_POSTS[0]['description']);
+}
+
+fillBigPicture();
+
+hideElement('.social__comment-count');
+hideElement('.comments-loader');
+document.querySelector('body')
+.classList
+.add('modal-open');
