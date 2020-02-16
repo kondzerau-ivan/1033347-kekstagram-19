@@ -30,26 +30,30 @@ function shuffle(array) {
   return result;
 }
 
-function message() {
+function getMessage() {
   return shuffle(MESSAGES).slice(random(1, 2)).join(' ');
 }
 
-function comment() {
-  return [].push({
+function getComment() {
+  return {
     avatar: 'img/avatar-' + random(1, 6) + '.svg',
-    message: message,
+    message: getMessage(),
     name: NAMES[random(0, 6)]
-  }.random(1, 5));
+  };
 }
 
 function getPost() {
+  var comments = [];
+  for (var e = 0; e <= random(1, 5); e++) {
+    comments.push(getComment());
+  }
   var POSTS = [];
   for (var u = 1; u <= 25; u++) {
     POSTS.push = {
       url: 'photos/' + u + '.jpg',
       description: '',
       likes: random(15, 200),
-      comments: comment
+      comments: comments
     };
   }
   return POSTS;
