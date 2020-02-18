@@ -42,19 +42,19 @@ function getComment() {
   };
 }
 
-function getPost() {
+function getPosts() {
   var comments = [];
-  for (var e = 0; e <= random(1, 5); e++) {
+  for (var e = 0; e < random(1, 5); e++) {
     comments.push(getComment());
   }
   var POSTS = [];
   for (var u = 1; u <= 25; u++) {
-    POSTS.push = {
+    POSTS.push({
       url: 'photos/' + u + '.jpg',
       description: '',
       likes: random(15, 200),
       comments: comments
-    };
+    });
   }
   return POSTS;
 }
@@ -70,7 +70,7 @@ function fillPicture(target, template, NEW_POSTS) {
   return target;
 }
 
-var NEW_POSTS = getPost();
+var NEW_POSTS = getPosts();
 
 fillPicture('.picture', '#picture', NEW_POSTS);
 
