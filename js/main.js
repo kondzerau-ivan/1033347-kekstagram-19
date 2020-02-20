@@ -44,11 +44,11 @@ function getComment() {
 
 function getPosts() {
   var comments = [];
-  for (var e = 0; e < random(1, 5); e++) {
-    comments.push(getComment());
-  }
   var POSTS = [];
   for (var u = 1; u <= 25; u++) {
+    for (var e = 0; e < random(1, 5); e++) {
+      comments.push(getComment());
+    }
     POSTS.push({
       url: 'photos/' + u + '.jpg',
       description: '',
