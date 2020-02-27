@@ -30,27 +30,31 @@ function shuffle(array) {
   return result;
 }
 
-function message() {
+function getMessage() {
   return shuffle(MESSAGES).slice(random(1, 2)).join(' ');
 }
 
-function comment() {
+function getComment() {
   return {
     avatar: 'img/avatar-' + random(1, 6) + '.svg',
-    message: message,
+    message: getMessage(),
     name: NAMES[random(0, 6)]
   };
 }
 
-function getPost() {
+function getPosts() {
   var POSTS = [];
   for (var u = 1; u <= 25; u++) {
-    POSTS.push = {
+    var comments = [];
+    for (var e = 0; e < random(1, 5); e++) {
+      comments.push(getComment());
+    }
+    POSTS.push({
       url: 'photos/' + u + '.jpg',
       description: '',
       likes: random(15, 200),
-      comments: comment
-    };
+      comments: comments
+    });
   }
   return POSTS;
 }
@@ -66,5 +70,60 @@ function fillPicture(target, template, NEW_POSTS) {
   return target;
 }
 
-var NEW_POSTS = getPost();
+var NEW_POSTS = getPosts();
+
 fillPicture('.picture', '#picture', NEW_POSTS);
+
+function showElement(element) {
+  document.querySelector(element)
+  .classList
+  .remove('hidden');
+}
+
+function hideElement(element) {
+  document.querySelector(element)
+  .classList
+  .add('hidden');
+}
+
+showElement('.big-picture');
+
+function generateText() {
+  for (var y = 0; y < NEW_POSTS[0]['comments'].length; y++) {
+    var text = document.createTextNode(NEW_POSTS[0]['comments'][y]['message']);
+  }
+  return text;
+}
+
+function fillComment(block) {
+  var blockElement = document.querySelector(block).cloneNode(true);
+  blockElement.querySelector('.social__picture')
+  .setAttribute('src', NEW_POSTS[0]['comments']['avatar'])
+  .setAttribute('alt', NEW_POSTS[0]['comments']['name'])
+  .setAttribute('width', 35)
+  .setAttribute('height', 35);
+  blockElement.querySelector('.socil__text')
+  .appendChild(generateText);
+  document.querySelector('.social__comments')
+  .textContent(blockElement);
+}
+
+function fillBigPicture() {
+  document.querySelector('.big-picture__img img')
+  .setAttribute('src', NEW_POSTS[0]['url']);
+  document.querySelector('.likes-count')
+  .textContent = NEW_POSTS[0]['likes'];
+  document.querySelector('.comments-count')
+  .textContent = NEW_POSTS[0]['comments'].length;
+  fillComment('.social__comment');
+  document.querySelector('.social__caption')
+  .textContent(NEW_POSTS[0]['description']);
+}
+
+fillBigPicture();
+
+hideElement('.social__comment-count');
+hideElement('.comments-loader');
+document.querySelector('body')
+.classList
+.add('modal-open');
