@@ -43,9 +43,9 @@ function getComment() {
 }
 
 function getPosts() {
-  var comments = [];
   var POSTS = [];
   for (var u = 1; u <= 25; u++) {
+    var comments = [];
     for (var e = 0; e < random(1, 5); e++) {
       comments.push(getComment());
     }
