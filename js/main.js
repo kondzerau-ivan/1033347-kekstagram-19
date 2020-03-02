@@ -25,7 +25,7 @@ function shuffle(array) {
   var inputCopy = array.slice();
   var result = [];
   while (inputCopy.length !== 0) {
-    result = inputCopy.splice(random(0, inputCopy.length - 1), 1);
+    result.push(inputCopy.splice(random(0, inputCopy.length - 1), 1)[0]);
   }
   return result;
 }
@@ -61,8 +61,9 @@ function getPosts() {
 
 function fillPicture(target, template, NEW_POSTS) {
   for (var y = 0; y < NEW_POSTS.length; y++) {
-    var current = document.querySelector(template).cloneNode(true);
-    current.querySelector('.picture_img').src = NEW_POSTS[y]['url'];
+    var current = document.querySelector(template)
+      .content.querySelector('.picture').cloneNode(true);
+    current.querySelector('.picture__img').src = NEW_POSTS[y]['url'];
     current.querySelector('.picture__likes').textContent = NEW_POSTS[y]['likes'];
     current.querySelector('.picture__comments').textContent = NEW_POSTS[y]['comments'];
     document.querySelector(target).appendChild(current);
@@ -72,7 +73,7 @@ function fillPicture(target, template, NEW_POSTS) {
 
 var NEW_POSTS = getPosts();
 
-fillPicture('.picture', '#picture', NEW_POSTS);
+fillPicture('.pictures', '#picture', NEW_POSTS);
 
 function showElement(element) {
   document.querySelector(element)
@@ -96,28 +97,29 @@ function generateText() {
 }
 
 function fillComment(block) {
-  var blockElement = document.querySelector(block).cloneNode(true);
-  blockElement.querySelector('.social__picture')
-  .setAttribute('src', NEW_POSTS[0]['comments']['avatar'])
-  .setAttribute('alt', NEW_POSTS[0]['comments']['name'])
-  .setAttribute('width', 35)
-  .setAttribute('height', 35);
-  blockElement.querySelector('.socil__text')
-  .appendChild(generateText);
-  document.querySelector('.social__comments')
-  .textContent(blockElement);
+  for (var g = 0; g < NEW_POSTS[0]['comments'].length; g++) {
+    var blockElement = document.querySelector(block).cloneNode(true);
+    var blockElementPicture = blockElement.querySelector('.social__picture');
+    blockElementPicture.setAttribute('src', NEW_POSTS[0]['comments'][g]['avatar']);
+    blockElementPicture.setAttribute('alt', NEW_POSTS[0]['comments'][g]['name']);
+    blockElementPicture.setAttribute('width', 35);
+    blockElementPicture.setAttribute('height', 35);
+    blockElement.querySelector('.social__text').textContent = NEW_POSTS[0]['comments'][g]['message'];
+    document.querySelector('.social__comments')
+      .appendChild(blockElement);
+  }
 }
 
 function fillBigPicture() {
   document.querySelector('.big-picture__img img')
-  .setAttribute('src', NEW_POSTS[0]['url']);
+    .setAttribute('src', NEW_POSTS[0]['url']);
   document.querySelector('.likes-count')
-  .textContent = NEW_POSTS[0]['likes'];
+    .textContent = NEW_POSTS[0]['likes'];
   document.querySelector('.comments-count')
-  .textContent = NEW_POSTS[0]['comments'].length;
+    .textContent = NEW_POSTS[0]['comments'].length;
   fillComment('.social__comment');
   document.querySelector('.social__caption')
-  .textContent(NEW_POSTS[0]['description']);
+    .textContent = NEW_POSTS[0]['description'];
 }
 
 fillBigPicture();
@@ -125,5 +127,5 @@ fillBigPicture();
 hideElement('.social__comment-count');
 hideElement('.comments-loader');
 document.querySelector('body')
-.classList
-.add('modal-open');
+  .classList
+  .add('modal-open');
