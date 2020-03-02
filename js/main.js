@@ -87,8 +87,6 @@ function hideElement(element) {
   .add('hidden');
 }
 
-showElement('.big-picture');
-
 function generateText() {
   for (var y = 0; y < NEW_POSTS[0]['comments'].length; y++) {
     var text = document.createTextNode(NEW_POSTS[0]['comments'][y]['message']);
@@ -129,3 +127,5 @@ hideElement('.comments-loader');
 document.querySelector('body')
   .classList
   .add('modal-open');
+
+var fileUpload = document.querySelector('#upload-file');
