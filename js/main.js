@@ -124,8 +124,27 @@ fillBigPicture();
 
 hideElement('.social__comment-count');
 hideElement('.comments-loader');
-document.querySelector('body')
-  .classList
-  .add('modal-open');
+
+function getNewImage() {
+  var imgPreview = document.querySelector('.img-upload__preview > img');
+  imgPreview.setAttribute('src', fileUpload.getAttribute('value'));
+}
+
+function onFileUploadChange() {
+  getNewImage();
+  showElement('.img-upload__overlay');
+  document.querySelector('body').classList.add('modal-open');
+}
+
+function onFileUploadCancelClick() {
+  hideElement('.img-upload__overlay');
+  document.querySelector('body').classList.remove('modal-open');
+}
 
 var fileUpload = document.querySelector('#upload-file');
+
+fileUpload.addEventListener('change', onFileUploadChange);
+
+var uploadCancel = document.querySelector('#upload-cancel');
+
+uploadCancel.addEventListener('click', onFileUploadCancelClick);
