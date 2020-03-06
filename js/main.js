@@ -125,13 +125,8 @@ fillBigPicture();
 hideElement('.social__comment-count');
 hideElement('.comments-loader');
 
-function getNewImage() {
-  var imgPreview = document.querySelector('.img-upload__preview > img');
-  imgPreview.setAttribute('src', fileUpload.getAttribute('value'));
-}
-
 function onFileUploadChange() {
-  getNewImage();
+  showCustomImage();
   showElement('.img-upload__overlay');
   document.querySelector('body').classList.add('modal-open');
 }
@@ -148,3 +143,20 @@ fileUpload.addEventListener('change', onFileUploadChange);
 var uploadCancel = document.querySelector('#upload-cancel');
 
 uploadCancel.addEventListener('click', onFileUploadCancelClick);
+
+var imgPreview = document.querySelector('.img-upload__preview > img');
+var effectsPreview = document.querySelectorAll('.effects__preview');
+
+function showCustomImage() {
+  if (fileUpload.files) {
+    var reader = new FileReader();
+
+    reader.onload = function (element) {
+      imgPreview.setAttribute('src', element.target.result);
+      for (var x = 0; x < effectsPreview.length; x++) {
+        effectsPreview[x].style.backgroundImage = 'url(' + element.target.result + ')';
+      }
+    };
+  }
+  reader.readAsDataURL(fileUpload.files[0]);
+}
