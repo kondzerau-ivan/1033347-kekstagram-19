@@ -77,14 +77,14 @@ fillPicture('.pictures', '#picture', NEW_POSTS);
 
 function showElement(element) {
   document.querySelector(element)
-  .classList
-  .remove('hidden');
+    .classList
+    .remove('hidden');
 }
 
 function hideElement(element) {
   document.querySelector(element)
-  .classList
-  .add('hidden');
+    .classList
+    .add('hidden');
 }
 
 function generateText() {
@@ -102,7 +102,7 @@ function fillComment(block) {
     blockElementPicture.setAttribute('alt', NEW_POSTS[0]['comments'][g]['name']);
     blockElementPicture.setAttribute('width', 35);
     blockElementPicture.setAttribute('height', 35);
-    blockElement.querySelector('.social__text').textContent = NEW_POSTS[0]['comments'][g]['message'];
+    blockElement.querySelector('.social__text').textContent = generateText();
     document.querySelector('.social__comments')
       .appendChild(blockElement);
   }
@@ -124,16 +124,27 @@ fillBigPicture();
 
 hideElement('.social__comment-count');
 hideElement('.comments-loader');
-
-function onFileUploadChange() {
-  showCustomImage();
-  showElement('.img-upload__overlay');
-  document.querySelector('body').classList.add('modal-open');
+// close preview after press ESC
+function onFileUploadCancelEsc() {
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === 'Escape') {
+      hideElement('.img-upload__overlay');
+      document.querySelector('body').classList.remove('modal-open');
+    }
+  });
 }
 
 function onFileUploadCancelClick() {
   hideElement('.img-upload__overlay');
   document.querySelector('body').classList.remove('modal-open');
+}
+
+function onFileUploadChange() {
+  showCustomImage();
+  showElement('.img-upload__overlay');
+  document.querySelector('body').classList.add('modal-open');
+
+  onFileUploadCancelEsc();
 }
 
 var fileUpload = document.querySelector('#upload-file');
@@ -159,4 +170,40 @@ function showCustomImage() {
     };
   }
   reader.readAsDataURL(fileUpload.files[0]);
+}
+
+var effectLevelPin = document.querySelector('.effect-level__pin');
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevelValue = document.querySelector('.effect-level__value');
+
+function onEffectLevelPinMouseUp() {
+  var saturationLevel = Math.floor((effectLevelPin.offsetLeft / effectLevelLine.offsetWidth) * 100);
+  effectLevelValue.setAttribute('value', saturationLevel);
+}
+
+effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseUp);
+
+var textHashtags = document.querySelector('.text__hashtags');
+
+textHashtags.addEventListener('change', onHashtagChange);
+// function return message with Error or False if no Errors
+function validateHashtags(hashtags) {
+
+  if (hashtags.length > 5) {
+    throw new Error('Введите, пожалуйста, не более пяти хэштэгов.');
+  }
+  hashtags.forEach(function (hashtag) {
+    if (!(/^#[a-zа-я0-9]{1,20}$/.test(hashtag))) {
+      throw new Error('Неверный формат хэштэга.');
+    }
+  });
+}
+
+function onHashtagChange(evt) {
+  var hashtags = evt.currentTarget.value.toLowerCase().split(' ');
+  try {
+    validateHashtags(hashtags);
+  } catch (err) {
+    textHashtags.setCustomValidity(err.message);
+  }
 }
